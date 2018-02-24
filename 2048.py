@@ -67,16 +67,22 @@ def transition(maps, direction):
 def calculate(maps, direction):
 	if direction == LEFT:
 		for i in range(len(maps)):
-			if maps[i][0] == maps[i][1]:
-				maps[i][0] *= 2
-				maps[i][1] = 0
+			for k in range(len(maps[i]) - 1):
+				if maps[i][k] == maps[i][k + 1]:
+					break
+			if maps[i][k] == maps[i][k + 1]:
+				maps[i][k] *= 2
+				maps[i][k + 1] = 0
 				transition(maps, direction)
 		return maps
 	elif direction == RIGHT:
 		for i in range(len(maps)):
-			if maps[i][len(maps[i]) - 1 - 1] == maps[i][len(maps[i]) - 1]:
-				maps[i][len(maps[i]) - 1] *= 2
-				maps[i][len(maps[i]) - 1 - 1] = 0
+			for k in range(len(maps[i]) - 1, -1, -1):
+				if maps[i][k] == maps[i][k - 1]:
+					break
+			if maps[i][k - 1] == maps[i][k]:
+				maps[i][k] *= 2
+				maps[i][k - 1] = 0
 				transition(maps, direction)
 		return maps
 	return []
@@ -101,6 +107,7 @@ def map_generate(N):
 	result = []
 	for i in range(N):
 		result.append([0] * N)
+	result = value_generate(result)
 	return value_generate(result)
 
 def left(maps):
@@ -127,16 +134,12 @@ def down(maps):
 	maps = rotation(maps, LEFT)
 	return value_generate(maps)
 
-maps = [
-	[2, 0, 0],
-	[4, 4, 4],
-	[8, 8, 8]
-]
-
-welcome()
-
-maps = left(maps)
+maps = [[4, 0, 0, 0],
+[0, 0, 0, 0],
+[4, 0, 2, 0],
+[4, 0, 0, 0]]
 dump(maps)
+
+maps = up(maps)
 print ''
-maps = left(maps)
 dump(maps)
